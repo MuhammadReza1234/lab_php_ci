@@ -249,17 +249,15 @@ Maka ketika halaman web tersebut kalian refresh, kalian akan mendapat tampilan s
 
 ## MEMBUAT DATABASE : STUDI KASUS DATA ARTIKEL
 
+<img width="946" alt="1" src="https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/b44cbd72-d911-4f1c-9a66-a15f816855cb">
+
 Kalian bisa langsung saja membuat database pada PHPMyAdmin dengan mengklik tombol MySQL yang ada diatas kemudian masukan kode dibawah kemudian klik kirim.
 
 ```mysql
 CREATE DATABASE lab_ci4;
 ```
 
-![menambahkan_gambar](img/DATABASE%2012.png)
-
 ## PEMBUATAN TABEL 
-
-![menambahkan_gambar](img/MEMBUAT%20TABEL%2012.png)
 
 Setelah database berhasil dibuat. Selanjutnya proses pembuatan tabel pada database tersebut. Pembuatannya sama dengan sebelumnya, kalian hanya perlu menekan tombol MySQL pada Database sebelumnya kemudian masukan kode berikut:
 
