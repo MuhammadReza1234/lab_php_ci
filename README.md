@@ -242,3 +242,364 @@ Selanjutnya, ubahlah file about pada app view dengan kode berikut.
 Maka ketika halaman web tersebut kalian refresh, kalian akan mendapat tampilan seperti gambar dibawah ini.
 
 ![13](https://github.com/MuhammadReza1234/Lab11_php_ci/assets/115516607/8d34de11-9f3e-45c4-b375-d542dc06b2ab)
+
+# PRAKTIKUM 12
+
+## MEMBUAT DATABASE : STUDI KASUS DATA ARTIKEL
+
+Kalian bisa langsung saja membuat database pada PHPMyAdmin dengan mengklik tombol MySQL yang ada diatas kemudian masukan kode dibawah kemudian klik kirim.
+
+```mysql
+CREATE DATABASE lab_ci4;
+```
+
+![menambahkan_gambar](img/DATABASE%2012.png)
+
+## PEMBUATAN TABEL 
+
+![menambahkan_gambar](img/MEMBUAT%20TABEL%2012.png)
+
+Setelah database berhasil dibuat. Selanjutnya proses pembuatan tabel pada database tersebut. Pembuatannya sama dengan sebelumnya, kalian hanya perlu menekan tombol MySQL pada Database sebelumnya kemudian masukan kode berikut:
+
+```mysql
+CREATE TABLE artikel (
+    id INT(11) auto_increment,
+    judul VARCHAR(200) NOT NULL,
+    isi TEXT,
+    gambar VARCHAR(200),
+    status TINYINT(1) DEFAULT 0,
+    slug VARCHAR(200),
+    PRIMARY KEY(id)
+);
+```
+
+## KONFIGURASI KONEKSI DATABASE
+
+Konfigurasi dapat dilakukan dengan dua cara. Pertama, pada dua file app/config/database.php atau yang kedua menggunakan file .env seperti yang akan saya gunakan dengan menghapus tanda # pada bagian database seperti dibawah.
+
+![menambahkan_gambar](img/KONFIG%20KONEKSI%2012.png)
+
+## MEMBUAT MODEL
+
+Pembuatan model dilakukan untuk memproses artikel nantinya. Untuk pembuatan modelnya cukup dengan membuat file baru pada direktori app/models dengan nama ArtikelModel.php kemudian isi dengan kode berikut.
+
+```php
+<?php
+
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class ArtikelModel extends Model
+{
+    protected $table = 'Artikel';
+    protected $primaryKey = 'id';
+    protected $useAutoIncrement = true;
+    protected $allowedFields = ['Judul', 'Isi', 'status', 'Slug', 'Gambar'];
+}
+```
+
+## MEMBUAT CONTROLLER
+
+Buatlah kontroller baru pada direktori app/Controllers dengan nama Artikel.php kemudian masukan kode berikut.
+
+```php
+<?php
+
+namespace App\Controllers;
+
+use App\Models\ArtikelModel;
+
+class Artikel extends BaseController
+{
+
+    public function index()
+    {
+        $title = 'Daftar Artikel';
+        $model = new ArtikelModel();
+        $artikel = $model->findAll();
+        return view('artikel/index', compact('artikel', 'title'));
+    }
+}
+```
+
+## PEMBUATAN VIEW
+
+Buatlah direktori baru dengan nama artikel pada direktori app/views yang kemudian didalamnya buatlah file dengan nama index.php yang diisi dengan kode berikut:
+
+```php
+<?= $this->include('template/header'); ?>
+
+<?php if($artikel): foreach($artikel as $row): ?>
+<article class="entry">
+    <h2><a href="<?= base_url('/artikel/' . $row['slug']);?>"><?=$row['judul']; ?></a></h2>
+    <img src="<?= base_url('/gambar/' . $row['gambar']);?>" alt="<?=$row['judul']; ?>">
+    <p><?= substr($row['isi'], 0, 200); ?></p>
+</article>
+<hr class="divider" />
+<?php endforeach; else: ?>
+<article class="entry">
+    <h2>Belum ada data.</h2>
+</article>
+<?php endif; ?>
+
+<?= $this->include('template/footer'); ?>
+```
+
+Setelahnya refresh kembali browsernya dan kalian akan mendapatkan tampilan seperti gambar dibawah ini.
+
+![menambahkan_gambar](img/MEMBUAT%20VIEW%2012.png)
+
+Tampilan diatas menampilkan bahwa belum satupun data yang ditampilkan, jadi cobalah tambahkan beberapa data pada database agar dapat ditampilkan datanya. Berikut kode yang digunakan:
+
+```php
+INSERT INTO artikel (judul, isi, slug) VALUE
+('Artikel pertama', 'Lorem Ipsum adalah contoh teks atau dummy dalam industri percetakan dan penataan huruf atau typesetting. Lorem Ipsum telah menjadi standar contoh teks sejak tahun 1500an, saat seorang tukang cetak yang tidak dikenal mengambil sebuah kumpulan teks dan mengacaknya untuk menjadi sebuah
+buku contoh huruf.', 'artikel-pertama'), ('Artikel kedua', 'Tidak seperti anggapan banyak orang, Lorem Ipsum bukanlah
+teks-teks yang diacak. Ia berakar dari sebuah naskah sastra latin klasik dari era 45 sebelum masehi, hingga bisa dipastikan usianya telah mencapai lebih dari 2000 tahun.', 'artikel-kedua');
+```
+
+Refresh kembali browsernya dan akan menampilkan tampilan seperti ini.
+
+![menambahkan_gambar](img/INSERT%20ARTIKEL%2012.png)
+
+## MEMBUAT TAMPILAN DETAIL ARTIKEL
+
+Untuk membuat sebuah tampilan artikel yang mana ketika kita mengklik judul berita tersebut kita akan diarahkan kehalaman yang berbeda, cukup dengan menambahkan fungsi baru pada Controller Artikel dengan nama view(). Kemudian tambahkan kode berikut.
+
+```php
+public function view($slug)
+    {
+        $model = new ArtikelModel();
+        $artikel = $model->where(['slug' => $slug])->first();
+        
+        // Menampilkan error apabila data tidak ada.
+        if (!$artikel)
+        {
+            throw PageNotFoundException::forPageNotFound();
+        }
+        $title = $artikel['judul'];
+        return view('artikel/detail', compact('artikel', 'title'));
+    }
+```
+
+## MEMBUAT VIEW DETAIL
+
+Buat view baru untuk halaman detail dengan nama app/views/artikel/detail.php kemudian memasukan kode berikut.
+
+```php
+<?= $this->include('template/header'); ?>
+
+<article class="entry">
+    <h2><?= $artikel['judul']; ?></h2>
+    <img src="<?= base_url('/gambar/' . $artikel['gambar']);?>" alt="<?=$artikel['judul']; ?>">
+    <p><?= $artikel['isi']; ?></p>
+</article>
+
+<?= $this->include('template/footer'); ?>
+```
+
+## MEMBUAT ROUTING UNTUK ARTIKEL DETAIL
+
+Bukalah kembali file app/config/Routes.php kemudian tambahkan routing berikut untuk memunculkan artikel detail.
+
+```php
+$routes->get('/artikel/(:any)', 'Artikel::view/$1');
+```
+
+Setelah ditambahkan cek browser dengan URL http://localhost:8080/artikel/artikel-pertama dan inilah hasilnya
+
+![menambahkan_gambar](img/ROUTING%2012.png)
+
+## MEMBUAT MENU ADMIN
+
+Menu admin ini berfungsi sebagai salah satu proses CRUD data artikel. Cara membuatnya cukup buatlah method baru pada Controller Artikel dengan nama admin_index() menggunakan kode berikut.
+
+```php
+public function admin_index()
+    {
+        $title = 'Daftar Artikel';
+        $model = new ArtikelModel();
+        $artikel = $model->findAll();
+        return view('artikel/admin_index', compact('artikel', 'title'));
+    }
+```
+
+Selanjutnya buat view untuk dapat membuat tampilan admin dengan nama admin_index.php, kemudian masukan kode berikut
+
+```php
+<?= $this->include('template/admin_header'); ?>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Judul</th>
+            <th>Status</th>
+            <th>AKsi</th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if($artikel): foreach($artikel as $row): ?>
+    <tr>
+        <td><?= $row['id']; ?></td>
+        <td>
+            <b><?= $row['judul']; ?></b>
+            <p><small><?= substr($row['isi'], 0, 50); ?></small></p>
+        </td>
+        <td><?= $row['status']; ?></td>
+        <td>
+            <a class="btn" href="<?= base_url('/admin/artikel/edit/' .
+$row['id']);?>">Ubah</a>
+            <a class="btn btn-danger" onclick="return confirm('Yakin
+menghapus data?');" href="<?= base_url('/admin/artikel/delete/' .
+$row['id']);?>">Hapus</a>
+        </td>
+    </tr>
+    <?php endforeach; else: ?>
+    <tr>
+        <td colspan="4">Belum ada data.</td>
+    </tr>
+    <?php endif; ?>
+    </tbody>
+    <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Judul</th>
+            <th>Status</th>
+            <th>AKsi</th>
+        </tr>
+    </tfoot>
+</table>
+
+<?= $this->include('template/admin_footer'); ?>
+```
+
+Kemudian tambahkanlah routing untuk menu admin seperti berikut
+
+```php
+$routes->group('admin', function($routes) {
+    $routes->get('artikel', 'Artikel::admin_index');
+    $routes->add('artikel/add', 'Artikel::add');
+    $routes->add('artikel/edit/(:any)', 'Artikel::edit/$1');
+    $routes->get('artikel/delete/(:any)', 'Artikel::delete/$1');
+});
+```
+
+![menambahkan_gambar](img/ADMIN%2012.png)
+
+Setelah ditambahkan akseslah menu admin untuk dapat melihat hasil seperti diatas dengan menggunakan URL http://localhost:8080/admin/artikel/
+
+
+## MENAMBAHKAN DATA ARTIKEL
+
+Untuk menambahkannnya cukup dengan tambahkan fungsi/method baru pada Controller Artikel dengan nama add() dengan kode sebagai berikut.
+
+```php
+public function add()
+    {
+        // validasi data.
+        $validation = \Config\Services::validation();
+        $validation->setRules(['judul' => 'required']);
+        $isDataValid = $validation->withRequest($this->request)->run();
+
+        if ($isDataValid)
+        {
+        $artikel = new ArtikelModel();
+        $artikel->insert([
+            'judul' => $this->request->getPost('judul'),
+            'isi' => $this->request->getPost('isi'),
+            'slug' => url_title($this->request->getPost('judul')),
+        ]);
+        return redirect('admin/artikel');
+        }
+        $title = "Tambah Artikel";
+        return view('artikel/form_add', compact('title'));
+    }
+```
+
+![menambahkan_gambar](img/FORM%20ADD%2012.png)
+
+Kemudian buatlah view atau tampilan seperti diatas untuk form tambahan dengan nama form_add.php yang diisi dengan kode berikut.
+
+```php
+<?= $this->include('template/admin_header'); ?>
+
+<h2><?= $title; ?></h2>
+<form action="" method="post">
+    <p>
+        <input type="text" name="judul">
+    </p>
+    <p>
+        <textarea name="isi" cols="50" rows="10"></textarea>
+    </p>
+    <p><input type="submit" value="Kirim" class="btn btn-large"></p>
+</form>
+
+<?= $this->include('template/admin_footer'); ?>
+```
+
+## MENGUBAH DATA
+
+Untuk mengubah data cukup dengan menambahkan fungsi/method baru pada Controller Artikel dengan nama edit() dengan kode berikut
+
+```php
+public function edit($id)
+    {
+        $artikel = new ArtikelModel();
+        
+        // validasi data.
+        $validation = \Config\Services::validation();
+        $validation->setRules(['judul' => 'required']);
+        $isDataValid = $validation->withRequest($this->request)->run();
+
+        if ($isDataValid)
+        {
+            $artikel->update($id, [
+                'judul' => $this->request->getPost('judul'),
+                'isi' => $this->request->getPost('isi'),
+            ]);
+            return redirect('admin/artikel');
+        }
+
+        // ambil data lama
+        $data = $artikel->where('id', $id)->first();
+        $title = "Edit Artikel";
+        return view('artikel/form_edit', compact('title', 'data'));
+    }
+```
+
+![menambahkan_gambar](img/UBAH%20DATA%2012.png)
+
+Kemudian buatlah tampilan seperti diatas untuk form tambah dengan nama form_edit.php yang diisi dengan kode berikut.
+
+```php
+<?= $this->include('template/admin_header'); ?>
+
+<h2><?= $title; ?></h2>
+<form action="" method="post">
+    <p>
+        <input type="text" name="judul" value="<?= $data['judul'];?>" >
+    </p>
+    <p>
+        <textarea name="isi" cols="50" rows="10"><?=
+$data['isi'];?></textarea>
+    </p>
+    <p><input type="submit" value="Kirim" class="btn btn-large"></p>
+</form>
+
+<?= $this->include('template/admin_footer'); ?>
+```
+
+## MENGHAPUS DATA
+
+Hapus data dengan menambahkan fungsi/method baru pada Controller Artikel dengan nama delete() dengan kode berikut.
+
+```php
+public function delete($id)
+    {
+        $artikel = new ArtikelModel();
+        $artikel->delete($id);
+        return redirect('admin/artikel');
+    }
+```
