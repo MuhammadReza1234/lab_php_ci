@@ -243,6 +243,8 @@ Maka ketika halaman web tersebut kalian refresh, kalian akan mendapat tampilan s
 
 ![13](https://github.com/MuhammadReza1234/Lab11_php_ci/assets/115516607/8d34de11-9f3e-45c4-b375-d542dc06b2ab)
 
+---
+
 # PRAKTIKUM 12
 
 ## MEMBUAT DATABASE : STUDI KASUS DATA ARTIKEL
