@@ -277,7 +277,7 @@ CREATE TABLE artikel (
 
 Konfigurasi dapat dilakukan dengan dua cara. Pertama, pada dua file app/config/database.php atau yang kedua menggunakan file .env seperti yang akan saya gunakan dengan menghapus tanda # pada bagian database seperti dibawah.
 
-![menambahkan_gambar](img/KONFIG%20KONEKSI%2012.png)
+<img width="474" alt="2" src="https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/2d58d39d-d6bc-4d92-9a91-fc3b3f1ea2d1">
 
 ## MEMBUAT MODEL
 
