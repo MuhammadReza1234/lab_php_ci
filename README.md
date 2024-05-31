@@ -604,6 +604,8 @@ public function delete($id)
     }
 ```
 
+---
+
 # PRAKTIKUM 13
 
 ## MEMBUAT TABEL : USER LOGIN
