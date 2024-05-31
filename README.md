@@ -348,7 +348,7 @@ Buatlah direktori baru dengan nama artikel pada direktori app/views yang kemudia
 
 Setelahnya refresh kembali browsernya dan kalian akan mendapatkan tampilan seperti gambar dibawah ini.
 
-![menambahkan_gambar](img/MEMBUAT%20VIEW%2012.png)
+![3](https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/e4126b58-b938-4f75-817e-08e0c33e606a)
 
 Tampilan diatas menampilkan bahwa belum satupun data yang ditampilkan, jadi cobalah tambahkan beberapa data pada database agar dapat ditampilkan datanya. Berikut kode yang digunakan:
 
@@ -361,7 +361,7 @@ teks-teks yang diacak. Ia berakar dari sebuah naskah sastra latin klasik dari er
 
 Refresh kembali browsernya dan akan menampilkan tampilan seperti ini.
 
-![menambahkan_gambar](img/INSERT%20ARTIKEL%2012.png)
+![4](https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/b23bb94f-5646-4503-aa83-e1cfffebe1b3)
 
 ## MEMBUAT TAMPILAN DETAIL ARTIKEL
 
@@ -409,7 +409,7 @@ $routes->get('/artikel/(:any)', 'Artikel::view/$1');
 
 Setelah ditambahkan cek browser dengan URL http://localhost:8080/artikel/artikel-pertama dan inilah hasilnya
 
-![menambahkan_gambar](img/ROUTING%2012.png)
+![5](https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/c58b41fc-0bc1-47bd-b728-92798e8d5733)
 
 ## MEMBUAT MENU ADMIN
 
@@ -486,7 +486,7 @@ $routes->group('admin', function($routes) {
 });
 ```
 
-![menambahkan_gambar](img/ADMIN%2012.png)
+![6](https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/5eb56a84-405c-43bc-b70e-bf81eb93cb00)
 
 Setelah ditambahkan akseslah menu admin untuk dapat melihat hasil seperti diatas dengan menggunakan URL http://localhost:8080/admin/artikel/
 
@@ -518,7 +518,7 @@ public function add()
     }
 ```
 
-![menambahkan_gambar](img/FORM%20ADD%2012.png)
+![7](https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/9fd2bc58-08dc-4530-a5dc-020da392b4a0)
 
 Kemudian buatlah view atau tampilan seperti diatas untuk form tambahan dengan nama form_add.php yang diisi dengan kode berikut.
 
@@ -569,7 +569,7 @@ public function edit($id)
     }
 ```
 
-![menambahkan_gambar](img/UBAH%20DATA%2012.png)
+![8](https://github.com/MuhammadReza1234/lab_php_ci/assets/115516607/ea88c46a-39bd-49e4-8414-5252cd2ec74d)
 
 Kemudian buatlah tampilan seperti diatas untuk form tambah dengan nama form_edit.php yang diisi dengan kode berikut.
 
